@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horse Race Animation</title>
+  <style>
+    body {
+        background-color: #656666;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    canvas {
+        margin-top: 80px;
+        border: 2px solid #fff;
+        margin-bottom: 20px;
+    }
+    button, input {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px;
+    }
+    .horse-name-input {
+        margin: 5px;
+    }
+  </style>
+  <!-- SweetAlert CSS and JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="container">
+    <canvas id="horseCanvas" width="600" height="600"></canvas>
+</div>
+<input id="numHorses" type="number" placeholder="Enter number of horses" min="1" max="10">
+<div id="horseNamesContainer"></div>
+<button id="startButton">Start Race</button>
+
+<script>
+  const canvas = document.getElementById('horseCanvas');
+  const ctx = canvas.getContext('2d');
+  const startButton = document.getElementById('startButton');
+  const numHorsesInput = document.getElementById('numHorses');
+  const horseNamesContainer = document.getElementById('horseNamesContainer');
+
+  const horseImages = [
+      '/images/h1.jpg',
+      '/images/h2.jpg',
+      '/images/h3.jpg',
+      '/images/h4.jpg'
+  ];
+
+  const images = [];
+  let currentIndex = 0;
+  let imagesLoaded = 0;
+  let raceOver = false;
+  let finishedHorses = 0;
+  let horses = [];
+
+  // โหลดภาพม้า
+  horseImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+          imagesLoaded++;
+          if (imagesLoaded === horseImages.length) {
+              drawInitialHorses(3);
+          }
+      };
+      images.push(img);
+  });
+
+  // สร้าง input สำหรับชื่อม้าเมื่อมีการเปลี่ยนจำนวนม้า
+  numHorsesInput.addEventListener('input', () => {
+      const numHorses = parseInt(numHorsesInput.value) || 3;
+      createHorseNameInputs(numHorses);
+  });
+
+  function createHorseNameInputs(numHorses) {
+      horseNamesContainer.innerHTML = '';
+      for (let i = 0; i < numHorses; i++) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.placeholder = `Enter name for horse ${i + 1}`;
+          input.className = 'horse-name-input';
+          input.id = `horseName${i}`;
+          horseNamesContainer.appendChild(input);
+      }
+  }
+
+  // ฟังก์ชันเพื่อวาดม้าเริ่มต้น
+  function drawInitialHorses(numHorses) {
+      horses = createHorses(numHorses);
+      horses.forEach(horse => {
+          drawHorse(horse.x, horse.y, 50, 35, horse.hue);
+      });
+      drawHorseNames(); // วาดชื่อม้าแยกออกมา
+  }
+
+  // ฟังก์ชันสร้างม้า
+  function createHorses(numHorses) {
+      const horses = [];
+      const spacing = 60;
+      const offset = 20; 
+      for (let i = 0; i < numHorses; i++) {
+          const nameInput = document.getElementById(`horseName${i}`);
+          const name = nameInput ? nameInput.value || `Horse ${i + 1}` : `Horse ${i + 1}`;
+          horses.push({
+            x: 0,
+            y: i * spacing+ offset,
+            hue: (i * 60) % 360,
+            speed: getRandomSpeed(),
+            name: name,
+            finished: false,
+            rank: 0 // เพิ่มอันดับเริ่มต้น
+          });
+      }
+      return horses;
+  }
+
+  // ฟังก์ชันวาดม้า
+  function drawHorse(x, y, width, height, hueRotation) {
+      ctx.filter = `hue-rotate(${hueRotation}deg)`;
+      ctx.drawImage(images[currentIndex], x, y, width, height);
+      ctx.filter = 'none';
+  }
+
+  // ฟังก์ชันวาดชื่อม้าแยกออกมา
+  function drawHorseNames() {
+      horses.forEach(horse => {
+          ctx.font = '12px Arial';
+          ctx.fillStyle = '#fff';
+          ctx.fillText(horse.name, horse.x + 20, horse.y - 5); // วาดชื่อม้าแยกจากตัวม้า
+      });
+  }
+
+  // สุ่มความเร็วที่ม้าแต่ละตัวจะเคลื่อนที่
+    function getRandomSpeed() {
+        return Math.floor(Math.random() * 3) + 2; // ความเร็วเริ่มต้นระหว่าง 2 ถึง 5
+    }
+
+    // ฟังก์ชันเริ่มการแข่งม้า
+    // ฟังก์ชันเริ่มการแข่งม้า
+    // ฟังก์ชันเริ่มการแข่งม้า
+    function startRace(numHorses) {
+        horses = createHorses(numHorses);
+        finishedHorses = 0;
+        raceOver = false;
+
+        // เคลียร์ canvas และวาดม้าเริ่มต้น
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        horses.forEach(horse => {
+            drawHorse(horse.x, horse.y, 50, 35, horse.hue);
+        });
+        drawHorseNames(); // วาดชื่อม้าแยกออกมา
+
+        // ฟังก์ชันที่ใช้สำหรับเคลื่อนที่ม้า
+        horses.forEach(horse => {
+            let interval = setInterval(() => {
+                if (horse.finished) return;
+
+                // ลบม้าและชื่อม้าเก่าออก
+                ctx.clearRect(horse.x, horse.y - 20, 120, 90); // ลบทั้งม้าและพื้นที่ชื่อที่อยู่เหนือม้า
+
+                // เพิ่มความเร็วแบบสุ่มในระหว่างการแข่งขัน
+                if (Math.random() < 0.2) { // 20% ของเวลาให้เปลี่ยนความเร็ว
+                    horse.speed = getRandomSpeed();
+                }
+
+                horse.x += horse.speed; // เคลื่อนที่ม้า
+
+                if (horse.x >= 500) { // ม้าถึงเส้นชัย
+                    horse.finished = true;
+                    finishedHorses++;
+
+                    // กำหนดอันดับของม้าที่จบการแข่งขัน
+                    horse.rank = finishedHorses; // อัปเดตอันดับเมื่อม้าจบการแข่งขัน
+
+                    if (finishedHorses === horses.length) {
+                        Swal.fire(`ม้าของ ${horse.name} กากจัดถึงคนสุดท้าย`); // แจ้งเตือนผู้แพ้พร้อมอันดับ
+                        raceOver = true;
+                        
+                    }
+
+                    clearInterval(interval);
+                }
+
+                // วาดม้าใหม่และชื่อใหม่
+                drawHorse(horse.x, horse.y, 50, 35, horse.hue);
+                drawHorseNames(); // วาดชื่อม้าให้อยู่บนม้า
+            }, 50);
+        });
+    }
+
+// เริ่มการแข่งเมื่อกดปุ่ม
+  startButton.addEventListener('click', () => {
+      const numHorses = parseInt(numHorsesInput.value) || 3;
+
+      if (raceOver || finishedHorses === 0) {
+          currentIndex = 0;
+          startRace(numHorses);
+      } else {
+          alert('Race is still in progress. Please wait until all horses finish.');
+      }
+  });
+
+  // ตั้งเวลาเปลี่ยนภาพม้า (สำหรับแอนิเมชัน)
+  setInterval(() => {
+      currentIndex = (currentIndex + 1) % images.length;
+  }, 83.33);
+</script>
+
+</body>
+</html>

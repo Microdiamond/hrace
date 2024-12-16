@@ -1,0 +1,866 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link rel="stylesheet" href="uniStyle.css" type="text/css">
+<link rel="stylesheet" href="toastr.min.css" type="text/css">
+<script src="jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="jquery.localize.js" type="text/javascript" charset="utf-8"></script>
+<script src="toastr.min.js" type="text/javascript" charset="utf-8"></script>
+<SCRIPT language=JavaScript src="xml.js"></SCRIPT>
+<script language="JavaScript">
+var Lang=0;
+function GetDevData()
+{
+	var langtype = getLanguage();
+	if(document.getElementById("DevLang").innerHTML=="en"){
+		Lang=2;
+	}
+	if(document.getElementById("DevLang").innerHTML=="Auto"){
+		if(langtype=="en") Lang=2;
+	}
+	GetXmlFile("RealUPSData.xml");
+	UPSTemperature.innerText = GetXmlTextByTagName(xmlDoc, "D60001");
+	UPSFTemperature.innerText = TempToFTemp(GetXmlTextByTagName(xmlDoc, "D60001"));
+	BatteryCapacity.innerText = GetXmlTextByTagName(xmlDoc, "D60002");
+	BatteryTemperature.innerText = GetXmlTextByTagName(xmlDoc, "D60003");
+	BatteryFTemperature.innerText = TempToFTemp(GetXmlTextByTagName(xmlDoc, "D60003"));
+	BatteryVoltage.innerText = GetXmlTextByTagName(xmlDoc, "D60004");
+	BatteryCurrent.innerText = GetXmlTextByTagName(xmlDoc, "D60006");
+	InputFrequency.innerText = GetXmlTextByTagName(xmlDoc, "D60008");
+	OutputFrequency.innerText = GetXmlTextByTagName(xmlDoc, "D60009");
+	BypassFrequency.innerText = GetXmlTextByTagName(xmlDoc, "D6000A");
+	ChargeTime.innerText = GetTime(GetXmlTextByTagName(xmlDoc, "D60007"));
+	DischargeTime.innerText = GetTime(GetXmlTextByTagName(xmlDoc, "D60005"));
+	
+	InputVoltageA.innerText = GetXmlTextByTagName(xmlDoc, "D6000C");
+	InputVoltageB.innerText = GetXmlTextByTagName(xmlDoc, "D6000D");
+	InputVoltageC.innerText = GetXmlTextByTagName(xmlDoc, "D6000E");
+	OutputVoltageA.innerText = GetXmlTextByTagName(xmlDoc, "D6000F");
+	OutputVoltageB.innerText = GetXmlTextByTagName(xmlDoc, "D60010");
+	OutputVoltageC.innerText = GetXmlTextByTagName(xmlDoc, "D60011");
+	InputCurrentA.innerText = GetXmlTextByTagName(xmlDoc, "D60012");
+	InputCurrentB.innerText = GetXmlTextByTagName(xmlDoc, "D60013");
+	InputCurrentC.innerText = GetXmlTextByTagName(xmlDoc, "D60014");
+	OutputCurrentA.innerText = GetXmlTextByTagName(xmlDoc, "D60015");
+	OutputCurrentB.innerText = GetXmlTextByTagName(xmlDoc, "D60016");
+	OutputCurrentC.innerText = GetXmlTextByTagName(xmlDoc, "D60017");
+	BypassVoltageA.innerText = GetXmlTextByTagName(xmlDoc, "D60018");
+	BypassVoltageB.innerText = GetXmlTextByTagName(xmlDoc, "D60019");
+	BypassVoltageC.innerText = GetXmlTextByTagName(xmlDoc, "D6001A");
+	BypassCurrentA.innerText = GetXmlTextByTagName(xmlDoc, "D6001B");
+	BypassCurrentB.innerText = GetXmlTextByTagName(xmlDoc, "D6001C");
+	BypassCurrentC.innerText = GetXmlTextByTagName(xmlDoc, "D6001D");
+	OutputPowerA.innerText = GetXmlTextByTagName(xmlDoc, "D6001E");
+	OutputPowerB.innerText = GetXmlTextByTagName(xmlDoc, "D6001F");
+	OutputPowerC.innerText = GetXmlTextByTagName(xmlDoc, "D60020");
+	UPSLoadA.innerText = GetXmlTextByTagName(xmlDoc, "D60021");
+	UPSLoadB.innerText = GetXmlTextByTagName(xmlDoc, "D60022");
+	UPSLoadC.innerText = GetXmlTextByTagName(xmlDoc, "D60023");
+
+	Manufacturer.innerText = GetXmlTextByTagName(xmlDoc, "DS0001");
+	DeviceModel.innerText = GetXmlTextByTagName(xmlDoc, "DS0002");
+	//SoftVersion.innerText = GetXmlTextByTagName(xmlDoc, "DS0003");
+	DeviceSN.innerText = GetXmlTextByTagName(xmlDoc, "DS0004");
+	RatedInputVoltage.innerText = GetXmlTextByTagName(xmlDoc, "DS0005");
+	RateBatterVoltage.innerText = GetXmlTextByTagName(xmlDoc, "DS0006");
+	BatterSection.innerText = GetXmlTextByTagName(xmlDoc, "DS0007");
+	RatedFrequency.innerText = GetXmlTextByTagName(xmlDoc, "DS0008");
+	RatedPower.innerText = GetXmlTextByTagName(xmlDoc, "DS0009");
+	BatteryDue.innerText = GetXmlTextByTagName(xmlDoc, "DS000A");
+	UPStype.innerText = GetXmlTextByTagName(xmlDoc, "DS000B");
+	InputUPSPhase.innerText = GetXmlTextByTagName(xmlDoc, "DS000C");
+	OutputUPSPhase.innerText = GetXmlTextByTagName(xmlDoc, "DS000D");
+	
+	LinkUPS=GetXmlTextByTagName(xmlDoc, "D6801F");//UPS ����
+	CityPower=GetXmlTextByTagName(xmlDoc, "D68000");//�е�״̬
+	BatteryLow=GetXmlTextByTagName(xmlDoc, "D68001");//��ص�ѹ
+	UPSMode=GetXmlTextByTagName(xmlDoc, "D68002");//UPS ģʽ
+	RUNStatus=GetXmlTextByTagName(xmlDoc, "D68003");//UPS ����
+    UPSStart=GetXmlTextByTagName(xmlDoc, "D68004");//����״̬
+    SelfChecking=GetXmlTextByTagName(xmlDoc, "D68005");//�Լ�״̬
+    LoadStatus=GetXmlTextByTagName(xmlDoc, "D68006");//����״̬
+	Temperature=GetXmlTextByTagName(xmlDoc, "D68007");//�¶�״̬
+	BatteryStatus=GetXmlTextByTagName(xmlDoc, "D68008");//����״̬
+	BatteryLife=GetXmlTextByTagName(xmlDoc, "D68009");//�������
+	OutputSwitch=GetXmlTextByTagName(xmlDoc, "D6800B");//�������
+	OutputStatus=GetXmlTextByTagName(xmlDoc, "D6800C");//���״̬
+	ChargeStatus=GetXmlTextByTagName(xmlDoc, "D6800D");//���״̬
+	FanStatus=GetXmlTextByTagName(xmlDoc, "D6800E");//����״̬
+	BypassStatus=GetXmlTextByTagName(xmlDoc, "D6800A");//��·״̬
+	FuseStatus=GetXmlTextByTagName(xmlDoc, "D6800F");//��˿״̬
+	Synchronous=GetXmlTextByTagName(xmlDoc, "D68012");//ͬ��״̬
+	StartUPS=GetXmlTextByTagName(xmlDoc, "D68010");//������ʽ
+	Phaseloss=GetXmlTextByTagName(xmlDoc, "D68011");//ȱ��״̬
+	PhaseSequence=GetXmlTextByTagName(xmlDoc, "D68013");//����״̬
+
+	if (LinkUPS=="1")
+	{
+		if(Lang==2){
+			toastr.error('UPS Disconnected!');
+		}else{
+			toastr.error('��UPS�豸ͨѶ��ʧ!');
+		}
+	}
+	AlarmTxt="CityPower";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop3.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state3.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+
+	AlarmTxt="BatteryLow";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop6.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Yes");
+		}else{
+			$("#"+AlarmTxt+'txt').text("��");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state6.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Not");
+		}else{
+			$("#"+AlarmTxt+'txt').text("��");
+		}
+	}
+	
+	AlarmTxt="UPSMode";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop2.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Bypass");
+		}else{
+			$("#"+AlarmTxt+'txt').text("��·");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state2.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Invert");
+		}else{
+			$("#"+AlarmTxt+'txt').text("���");
+		}
+	}
+	
+	AlarmTxt="RUNStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop25.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state25.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	
+	AlarmTxt="UPSStart";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop5.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Shutdown");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�ػ�");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state5.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Power ON");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	
+	AlarmTxt="SelfChecking";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop4.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Self Checking");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�Լ���");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state4.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Completed");
+		}else{
+			$("#"+AlarmTxt+'txt').text("���");
+		}
+	}
+	
+	AlarmTxt="LoadStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop16.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Overload");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state16.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	
+	AlarmTxt="Temperature";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop19.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Overtemp");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state19.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	
+	AlarmTxt="BatteryStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop11.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state11.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	
+	AlarmTxt="BatteryLife";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop13.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Overdue");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state13.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	
+	AlarmTxt="OutputSwitch";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop12.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Opened");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�Ͽ�");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state12.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Closed");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�պ�");
+		}
+	}
+	AlarmTxt="OutputStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop14.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state14.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	AlarmTxt="ChargeStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop20.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state20.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	AlarmTxt="FanStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop15.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state15.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	AlarmTxt="BypassStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop2.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state2.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	AlarmTxt="FuseStatus";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop17.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Fault");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state17.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Normal");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	AlarmTxt="Synchronous";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop16.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Asynchronous");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�첽");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state16.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Synchronous");
+		}else{
+			$("#"+AlarmTxt+'txt').text("ͬ��");
+		}
+	}
+	AlarmTxt="StartUPS";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop5.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Manual");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�ֶ�");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state5.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Auto");
+		}else{
+			$("#"+AlarmTxt+'txt').text("�Զ�");
+		}
+	}
+	AlarmTxt="Phaseloss";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop3.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Yes");
+		}else{
+			$("#"+AlarmTxt+'txt').text("ȱ��");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state3.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Not");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	AlarmTxt="PhaseSequence";
+	if(eval(AlarmTxt)=="1")
+	{
+		$("#"+AlarmTxt).attr("src","warngif/statestop16.png");
+		$("#"+AlarmTxt+'txt').css("color","#ff0000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Error");
+		}else{
+			$("#"+AlarmTxt+'txt').text("����");
+		}
+	}
+	else
+	{
+		$("#"+AlarmTxt).attr("src","warngif/state16.png");
+		$("#"+AlarmTxt+'txt').css("color","#000000");
+		if(Lang==2){
+			$("#"+AlarmTxt+'txt').text("Correct");
+		}else{
+			$("#"+AlarmTxt+'txt').text("��ȷ");
+		}
+	}
+	//UPS ͨѶ	
+	if(LinkUPS=="1")
+	{
+		upsimg.src ="warngif/ups_link_fail.gif";
+	}
+	//UPS״̬
+	else if (RUNStatus=="1"||ChargeStatus=="1"||FanStatus=="1"||FuseStatus=="1")
+	{
+		upsimg.src ="warngif/ups_stop.gif";
+	}
+	//����״̬
+	else if (UPSMode=="1"||LoadStatus=="1")
+	{
+		upsimg.src ="warngif/ups_bypass.gif";
+	}
+
+	//�е�״̬������״̬
+	else if ((CityPower=="1")||(SelfChecking=="1"))
+	{
+	    upsimg.src ="warngif/ups_ac_fail.gif";
+	}	 
+	
+	//����״̬
+	else if(UPSStart=="1")
+	{
+		upsimg.src ="warngif/ups_shutdown.gif";
+	}
+	//����
+	else
+	{
+		upsimg.src ="warngif/ups_online.gif";
+    }
+	setTimeout('GetDevData()',3000); //ָ��3��ˢ��һ�� 
+}
+</script>
+</head>
+<body >
+<div id="DevLang" style="display:none;">en</div>
+<div  class="wndmain">
+<div  align="center">
+  <br>
+  <table border="0" cellspacing="0" align="center" width="800">
+    <tr>
+      <td  width="250" align="right" valign="top" style="padding-top:100px"></td>
+      <td width="490"  style="text-align:center" >
+		<div align="center"><img src="warngif/ups_online.gif" id='upsimg' width='490' height='274' align="middle"></div></td>
+      <td width="250" valign="top" style="padding-top:100px" >
+	  </td>
+    </tr>
+    <tr>
+      <td  colspan="2"  valign="top" style="padding-top:10px">
+	 </td>
+      <td  valign="top" style="padding-top:10px">
+        </td>
+    </tr>
+  </table>
+  <br>
+  <table width="800" border="0" cellspacing="1"  cellpadding="3" class="listDiv" align="center" >
+     <tr><th colspan="5" style="text-align:left" data-localize="Lang1"></th></tr>
+    <tr>
+      <td width="24%" class="td_ll1" style="text-align:center"><span data-localize="Lang2"></span><img id="CityPower" style="vertical-align:middle"></td>
+      <td width="24%" class="td_lc1"><span id='CityPowertxt'></span></td>
+		<td class="td_lc1" width="4%" >&nbsp;</td>
+      <td width="24%" class="td_ll1" style="text-align:center"><span data-localize="Lang3"></span><img id="BatteryLow" style="vertical-align:middle" ></td>
+      <td class="td_lc1" width="24%"><span id='BatteryLowtxt'></span></td>
+    </tr>
+    <tr>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang4"></span><img id="UPSMode" style="vertical-align:middle"></td>
+      <td class="td_lc2"><span id='UPSModetxt'></span></td>
+		<td class="td_lc2">&nbsp;</td>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang5"></span><img id="RUNStatus" style="vertical-align:middle"></td>
+      <td class="td_lc2"><span id='RUNStatustxt'></span></td>
+    </tr>
+    <tr>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang6"></span><img id="UPSStart" style="vertical-align:middle"></td>
+      <td class="td_lc1"><span id='UPSStarttxt'></span></td>
+		<td class="td_lc1">&nbsp;</td>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang7"></span><img id="SelfChecking" style="vertical-align:middle"></td>
+      <td class="td_lc1"><span id='SelfCheckingtxt'></span></td>
+    </tr>
+    <tr>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang8"></span><img id="LoadStatus"  style="vertical-align:middle"></td>
+      <td class="td_lc2"><span id='LoadStatustxt'></span></td>
+	   <td class="td_lc2">&nbsp;</td>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang9"></span><img id="Temperature" style="vertical-align:middle"> </td>
+      <td class="td_lc2"><span id='Temperaturetxt'></span></td>
+	</tr>
+	<tr>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang_10"></span><img id="BatteryStatus"  style="vertical-align:middle"></td>
+      <td class="td_lc1"><span id='BatteryStatustxt'></span></td>
+	   <td class="td_lc1">&nbsp;</td>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang_11"></span><img id="BatteryLife" style="vertical-align:middle"> </td>
+      <td class="td_lc1"><span id='BatteryLifetxt'></span></td>
+	</tr>
+	
+	<tr>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang178"></span><img id="OutputSwitch"  style="vertical-align:middle"></td>
+      <td class="td_lc2"><span id='OutputSwitchtxt'></span></td>
+	   <td class="td_lc2">&nbsp;</td>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang179"></span><img id="OutputStatus" style="vertical-align:middle"> </td>
+      <td class="td_lc2"><span id='OutputStatustxt'></span></td>
+	</tr>
+	<tr>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang180"></span><img id="ChargeStatus"  style="vertical-align:middle"></td>
+      <td class="td_lc1"><span id='ChargeStatustxt'></span></td>
+	   <td class="td_lc1">&nbsp;</td>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang181"></span><img id="FanStatus" style="vertical-align:middle"> </td>
+      <td class="td_lc1"><span id='FanStatustxt'></span></td>
+	</tr>
+	<tr>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang177"></span><img id="BypassStatus"  style="vertical-align:middle"></td>
+      <td class="td_lc2"><span id='BypassStatustxt'></span></td>
+	   <td class="td_lc2">&nbsp;</td>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang182"></span><img id="FuseStatus" style="vertical-align:middle"> </td>
+      <td class="td_lc2"><span id='FuseStatustxt'></span></td>
+	</tr>
+	<tr>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang185"></span><img id="Synchronous"  style="vertical-align:middle"></td>
+      <td class="td_lc1"><span id='Synchronoustxt'></span></td>
+	   <td class="td_lc1">&nbsp;</td>
+      <td class="td_ll1" style="text-align:center"><span data-localize="Lang183"></span><img id="StartUPS" style="vertical-align:middle"> </td>
+      <td class="td_lc1"><span id='StartUPStxt'></span></td>
+	</tr>
+	<tr>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang184"></span><img id="Phaseloss"  style="vertical-align:middle"></td>
+      <td class="td_lc2"><span id='Phaselosstxt'></span></td>
+	   <td class="td_lc2">&nbsp;</td>
+      <td class="td_ll2" style="text-align:center"><span data-localize="Lang186"></span><img id="PhaseSequence" style="vertical-align:middle"> </td>
+      <td class="td_lc2"><span id='PhaseSequencetxt'></span></td>
+	</tr>
+  </table>
+
+<br>
+<table width="800" border="0" cellspacing="1"  cellpadding="3" class="listDiv" align="center" >
+     <tr><th colspan="5" style="text-align:left" data-localize="Lang10"></th>
+     </tr>
+  <tr >
+    <td class="td_lc1" width="24%"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc1" width="24%"  ><span id='InputVoltageA'></span> V</td>
+    <td class="td_lc1" width="4%"  >&nbsp;</td>
+    <td class="td_lc1" width="24%"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc1" width="24%"  ><span id='OutputVoltageA'></span> V</td>
+  </tr>
+  <tr>
+    <td class="td_lc1" ><span data-localize="Lang189"></span></td>
+    <td class="td_lc1"><span id='InputVoltageB'></span> V</td>
+    <td class="td_lc1">&nbsp;</td>
+    <td class="td_lc1" ><span data-localize="Lang190"></span></td>
+    <td class="td_lc1"  ><span id='OutputVoltageB'></span> V</td>
+  </tr>
+  <tr>
+    <td class="td_lc1" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc1"><span id='InputVoltageC'></span> V</td>
+    <td class="td_lc1">&nbsp;</td>
+    <td class="td_lc1" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc1"  ><span id='OutputVoltageC'></span> V</td>
+  </tr>
+  
+  <tr>
+    <td class="td_lc2"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc2"><span id='InputCurrentA'></span> A</td>
+    <td class="td_lc2">&nbsp;</td>
+    <td class="td_lc2" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc2"  ><span id='OutputCurrentA'></span> A</td>
+  </tr>
+  <tr>
+    <td class="td_lc2"  ><span data-localize="Lang191"></span></td>
+    <td class="td_lc2"><span id='InputCurrentB'></span> A</td>
+    <td class="td_lc2">&nbsp;</td>
+    <td class="td_lc2" ><span data-localize="Lang192"></span></td>
+    <td class="td_lc2"  ><span id='OutputCurrentB'></span> A</td>
+  </tr>
+  <tr>
+    <td class="td_lc2"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc2"><span id='InputCurrentC'></span> A</td>
+    <td class="td_lc2">&nbsp;</td>
+    <td class="td_lc2" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc2"  ><span id='OutputCurrentC'></span> A</td>
+  </tr>
+
+  <tr>
+    <td class="td_lc1"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc1"><span id='BypassVoltageA'></span> V</td>
+    <td class="td_lc1">&nbsp;</td>
+    <td class="td_lc1" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc1"  ><span id='BypassCurrentA'></span> A</td>
+  </tr>
+  <tr>
+    <td class="td_lc1"  ><span data-localize="Lang193"></span></td>
+    <td class="td_lc1"><span id='BypassVoltageB'></span> V</td>
+    <td class="td_lc1">&nbsp;</td>
+    <td class="td_lc1" ><span data-localize="Lang194"></span></td>
+    <td class="td_lc1"  ><span id='BypassCurrentB'></span> A</td>
+  </tr>
+  <tr>
+    <td class="td_lc1"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc1"><span id='BypassVoltageC'></span> V</td>
+    <td class="td_lc1">&nbsp;</td>
+    <td class="td_lc1" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc1"  ><span id='BypassCurrentC'></span> A</td>
+  </tr>
+
+<tr>
+    <td class="td_lc2"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc2"><span id='OutputPowerA'></span> KW</td>
+    <td class="td_lc2">&nbsp;</td>
+    <td class="td_lc2" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</td>
+    <td class="td_lc2"  ><span id='UPSLoadA'></span> %</td>
+  </tr>
+  <tr>
+    <td class="td_lc2"  ><span data-localize="Lang195"></span></td>
+    <td class="td_lc2"><span id='OutputPowerB'></span> KW</td>
+    <td class="td_lc2">&nbsp;</td>
+    <td class="td_lc2" ><span data-localize="Lang196"></span></td>
+    <td class="td_lc2"  ><span id='UPSLoadB'></span> %</td>
+  </tr>
+  <tr>
+    <td class="td_lc2"  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc2"><span id='OutputPowerC'></span> KW</td>
+    <td class="td_lc2">&nbsp;</td>
+    <td class="td_lc2" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C</td>
+    <td class="td_lc2"  ><span id='UPSLoadC'></span> %</td>
+  </tr>
+
+
+    <tr  >
+      <td class="td_lc1" data-localize="Lang13"></td>
+      <td class="td_lc1"><span id='InputFrequency'></span>&nbsp;Hz</td>
+	  <td class="td_lc1">&nbsp;</td>
+      <td class="td_lc1" data-localize="Lang14"></td>
+      <td class="td_lc1"><span id='OutputFrequency'></span>&nbsp;Hz</td>
+    </tr>
+	<tr  >
+      <td class="td_lc2" data-localize="Lang22"></td>                                   
+      <td class="td_lc2"><span id='BypassFrequency'></span>&nbsp;Hz</td>
+	  <td class="td_lc2">&nbsp;</td>
+      <td class="td_lc2" data-localize="Lang16"></td>
+      <td class="td_lc2"><span id='UPSTemperature'></span>&nbsp;��(<span id='UPSFTemperature'></span>&nbsp;F)</td>
+    </tr>
+	<tr  >
+      <td class="td_lc1" data-localize="Lang17"></td>
+      <td class="td_lc1"><span id='BatteryVoltage'></span>&nbsp;V</td>
+	  <td class="td_lc1">&nbsp;</td>
+      <td class="td_lc1" data-localize="Lang18"></td>
+      <td class="td_lc1"><span id='BatteryCapacity'></span>&nbsp;%</td>
+    </tr>
+	<tr  >
+      <td class="td_lc2" data-localize="Lang19"></td>
+      <td class="td_lc2"><span id='BatteryCurrent'></span>&nbsp;A</td>
+	  <td class="td_lc2">&nbsp;</td>
+      <td class="td_lc2" data-localize="Lang20"></td>
+      <td class="td_lc2"><span id='BatteryTemperature'></span>&nbsp;��(<span id='BatteryFTemperature'></span>&nbsp;F)</td>
+    </tr>
+	<tr>
+      <td class="td_lc1" data-localize="Lang187"></td>                                      
+      <td class="td_lc1"><span id='ChargeTime'></span>&nbsp;</td>       
+	  <td class="td_lc1">&nbsp;</td>                                              
+      <td class="td_lc1" data-localize="Lang188"></td>                                      
+      <td class="td_lc1"><span id='DischargeTime'></span>&nbsp;</td>  
+    </tr>                                                                                    
+</table>
+<br>
+  <br>
+  <table width="800" border="0" cellspacing="1"  cellpadding="3" class="listDiv" align="center">
+  <tr>
+    <th  style="text-align:left" colspan="5" data-localize="Lang23"></th>
+  </tr>
+  <tr>
+    <td class="td_lc1"  width="24%" data-localize="Lang24"></td>
+	<td class="td_lc1" width="24%" ><span id='Manufacturer'></span>&nbsp;</td>
+	<td class="td_lc1" width="4%" >&nbsp;</td>
+    	<td class="td_lc1" width="24%" data-localize="Lang25"></td>
+	<td class="td_lc1" width="24%" ><span id='DeviceModel'></span>&nbsp;</td>
+  </tr>
+<tr >
+    	<td class="td_lc2" data-localize="Lang26" ></td>
+	<td class="td_lc2"  ><span id='UPStype'></span>&nbsp;</td>
+	<td class="td_lc2"  >&nbsp;</td>
+	<td class="td_lc2"  data-localize="Lang27"></td>
+	<td class="td_lc2"  ><span id='RatedInputVoltage'></span>&nbsp;V</td>
+</tr>
+
+<tr >
+	<td class="td_lc1"  data-localize="Lang28"></td>
+	<td class="td_lc1"  ><span id='RateBatterVoltage'></span>&nbsp;V</td>
+	<td class="td_lc1"  >&nbsp;</td>
+	<td class="td_lc1"  data-localize="Lang29"></td>
+	<td class="td_lc1"  ><span id='BatterSection'></span>&nbsp;Cells</td>
+</tr>
+
+<tr >
+	<td class="td_lc2"  data-localize="Lang30"></td>
+	<td class="td_lc2"  ><span id='RatedFrequency'></span>&nbsp;Hz</td>
+	<td class="td_lc2"  >&nbsp;</td>
+	<td class="td_lc2" data-localize="Lang31"></td>
+	<td class="td_lc2"  ><span id='RatedPower'></span>&nbsp;KVA</td>
+</tr>
+
+<tr >
+	<td class="td_lc1"  data-localize="Lang_32"></td>
+	<td class="td_lc1"  ><span id='BatteryDue'></span>&nbsp;</td>
+	<td class="td_lc1"  >&nbsp;</td>
+	<td class="td_lc1"  data-localize="Lang_33"></td>
+	<td class="td_lc1"  ><span id='DeviceSN'></span>&nbsp;</td>
+</tr>
+
+<tr >
+	<td class="td_lc2"  data-localize="Lang_34"></td>
+	<td class="td_lc2"  ><span id='InputUPSPhase'></span>&nbsp;</td>
+	<td class="td_lc2"  >&nbsp;</td>
+	<td class="td_lc2"  data-localize="Lang_35"></td>
+	<td class="td_lc2"  ><span id='OutputUPSPhase'></span>&nbsp;</td>
+</tr>
+</table>
+<br>
+
+<br>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+window.onload = function(){
+	if(document.getElementById("DevLang").innerHTML=="en"){
+		$("[data-localize]").localize("language", { language: "en" });
+	}else if(document.getElementById("DevLang").innerHTML=="zh"){
+		$("[data-localize]").localize("language", { language: "zh" });
+	}else{
+		$("[data-localize]").localize("language");
+	}
+	GetDevData();
+}
+</script>
